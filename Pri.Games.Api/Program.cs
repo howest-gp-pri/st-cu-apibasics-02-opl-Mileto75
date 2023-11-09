@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Pri.Ca.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Pri.Ca.Core.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Pri.Games.Api
 {
@@ -36,7 +39,21 @@ namespace Pri.Games.Api
                 }
                 )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            //Add Authentication
+            builder.Services.AddAuthentication(options
+               =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidAudience = builder.Configuration["JWTConfiguration:Audience"],
+                ValidIssuer = builder.Configuration["JWTConfiguration:Issuer"],
+                RequireExpirationTime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTConfiguration:SigninKey"])),
+            });
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();
             builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
@@ -59,6 +76,7 @@ namespace Pri.Games.Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

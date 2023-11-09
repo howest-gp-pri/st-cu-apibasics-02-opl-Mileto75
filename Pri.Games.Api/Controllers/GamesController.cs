@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Pri.Ca.Core.Interfaces;
 using Pri.Ca.Core.Services.Models;
@@ -22,6 +23,7 @@ namespace Pri.Games.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _gameService.GetAllAsync();
