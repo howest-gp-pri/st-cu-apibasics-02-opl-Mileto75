@@ -14,5 +14,7 @@ namespace Pri.Ca.Core.Entities
         public int PublisherId { get; set; }
         public ICollection<Genre> Genres { get; set; }
         public string Image { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public string ApplicationUserId { get; set; }
     }
 }
