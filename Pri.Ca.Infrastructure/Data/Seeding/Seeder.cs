@@ -4,6 +4,7 @@ using Pri.Ca.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Pri.Ca.Infrastructure.Data.Seeding
                     new Publisher {Id = 1,Name = "Square Enix"},
                     new Publisher {Id = 2,Name = "EA"},
                 };
-            var games = new Game[] 
+            var games = new Game[]
             {
                 new Game { Id = 1,Title="Final Fantasy", PublisherId=1, Description="Rpg classic"},
                 new Game { Id = 2,Title="Fifa20",PublisherId=2,Description="Cool soccer game"},
@@ -68,18 +69,13 @@ namespace Pri.Ca.Infrastructure.Data.Seeding
             IPasswordHasher<ApplicationUser> _hasher = new PasswordHasher<ApplicationUser>();
             admin.PasswordHash = _hasher.HashPassword(admin, "Test123");
             user.PasswordHash = _hasher.HashPassword(user, "Test123");
-            //roles seeden
-            var roles = new IdentityRole<string>[]
+            //Seed roles as claims
+            var userClaims = new IdentityUserClaim<string>[]
             {
-                new IdentityRole<string>{Id = "1", Name = "Admin", NormalizedName = "ADMIN"},
-                new IdentityRole<string>{Id = "2", Name = "User", NormalizedName = "USER"},
-            };
-            //users aan de roles koppelen
-            var userRoles = new IdentityUserRole<string>[]
-            {
-                new IdentityUserRole<string>{RoleId = "1",UserId = admin.Id },
-                new IdentityUserRole<string>{RoleId = "2",UserId = user.Id },
-
+                new IdentityUserClaim<string>{Id = 1,UserId = admin.Id,ClaimType = ClaimTypes.Role,ClaimValue = "Admin"},
+                new IdentityUserClaim<string>{Id = 2,UserId = user.Id,ClaimType = ClaimTypes.Role,ClaimValue = "User"},
+                new IdentityUserClaim<string>{Id = 3,UserId = admin.Id,ClaimType = ClaimTypes.NameIdentifier,ClaimValue = admin.Id},
+                new IdentityUserClaim<string>{Id = 4,UserId = user.Id,ClaimType = ClaimTypes.NameIdentifier,ClaimValue = user.Id},
             };
             //modelbuilder
             modelBuilder.Entity<Publisher>().HasData(publishers);
@@ -87,8 +83,7 @@ namespace Pri.Ca.Infrastructure.Data.Seeding
             modelBuilder.Entity<Genre>().HasData(genres);
             modelBuilder.Entity($"{nameof(Game)}{nameof(Genre)}").HasData(gamesGenres);
             modelBuilder.Entity<ApplicationUser>().HasData(new ApplicationUser[] { admin, user });
-            modelBuilder.Entity<IdentityRole>().HasData(roles);
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(userRoles);
+            modelBuilder.Entity<IdentityUserClaim<string>>().HasData(userClaims);
         }
     }
 }
