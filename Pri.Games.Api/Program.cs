@@ -63,6 +63,8 @@ namespace Pri.Games.Api
                     => policy.RequireAssertion(context =>
                     {
                         //must be user or admin
+                        //check if claims are present
+                        //if == 0 => no token provided
                         if(context.User.Claims.Count() == 0)
                         {
                             return false;
