@@ -42,6 +42,13 @@ namespace Pri.Games.Api.Controllers
             var claims = await _userManager.GetClaimsAsync(user);
             //add userId to claims
             claims.Add(new Claim(ClaimTypes.PrimarySid,user.Id));
+            //put roles in claims
+            var roles = await _userManager.GetRolesAsync(user);
+            //convert to claims and put in claims array
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             //generate the security key
             var securityKey = 
                 new SymmetricSecurityKey

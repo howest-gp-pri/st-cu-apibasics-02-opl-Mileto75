@@ -23,7 +23,7 @@ namespace Pri.Games.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _gameService.GetAllAsync();
