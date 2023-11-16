@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pri.Ca.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using Pri.Ca.Infrastructure.Data;
 namespace Pri.Ca.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116183053_AddBirthDateToSeeding")]
+    partial class AddBirthDateToSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,14 +160,14 @@ namespace Pri.Ca.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid",
+                            ClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
                             ClaimValue = "1",
                             UserId = "1"
                         },
                         new
                         {
                             Id = 4,
-                            ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid",
+                            ClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
                             ClaimValue = "2",
                             UserId = "2"
                         },
@@ -328,7 +330,7 @@ namespace Pri.Ca.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GAMES.COM",
                             NormalizedUserName = "ADMIN@GAMES.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELKxUVozfH4gWYTe2RmBuHN9je6qsRmaorbu+We0cpnbYZ0jX88nFezbvTH37WSqXA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK04SD4AaShxPSq/YHDL84GPJRsYyvszTOzg076vX4gT5RDAX4SS7Jv5XFttWM6DUQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "00000000-0000-0000-0000-000000000000",
                             TwoFactorEnabled = false,
@@ -347,7 +349,7 @@ namespace Pri.Ca.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@GAMES.COM",
                             NormalizedUserName = "USER@GAMES.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAUmtNysN1totpRFL+IGabRvVB6Du7NikD4JTI5uDy5ql0NVpXZ7qioFRadFg/bmxQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDv3HDnOtDIbpcptILMlcUlQwaxqXI5LwUVgBsu0Cf920eeIE15LKH9WkNzT3Bp2Gg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "00000000-0000-0000-0000-000000000000",
                             TwoFactorEnabled = false,

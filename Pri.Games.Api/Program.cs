@@ -9,6 +9,7 @@ using Pri.Ca.Core.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Security.Claims;
 
 namespace Pri.Games.Api
 {
@@ -53,6 +54,45 @@ namespace Pri.Games.Api
                 ValidIssuer = builder.Configuration["JWTConfiguration:Issuer"],
                 RequireExpirationTime = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTConfiguration:SigninKey"])),
+            });
+            builder.Services.AddAuthorization(options =>
+            {
+                //define policies
+                //user policy
+                options.AddPolicy("User", policy
+                    => policy.RequireAssertion(context =>
+                    {
+                        //must be user or admin
+                        if(context.User.Claims.Count() == 0)
+                        {
+                            return false;
+                        }
+                        var role = context
+                        .User
+                        .Claims
+                        .FirstOrDefault(c => c.Type.Equals(ClaimTypes.Role));
+                        if (role.Value.Equals("User") || role.Value.Equals("Admin"))
+                            return true;
+                        return false;
+                    }));
+                //admin policy
+                options.AddPolicy("Admin", policy
+                    => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                options.AddPolicy("NotUser", policy => policy.RequireAssertion(
+                    context => 
+                    {
+                        //perform specific checks
+                        var role = context
+                        .User
+                        .Claims
+                        .FirstOrDefault(c => c.Type.Equals(ClaimTypes.Role));
+                        if(role.Value.Equals("User"))
+                        {
+                            return false;
+                        }
+                        return true;
+                    }
+                    ));
             });
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();

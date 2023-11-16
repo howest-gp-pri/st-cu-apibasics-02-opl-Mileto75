@@ -27,7 +27,7 @@ namespace Pri.Games.Api.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(AccountLoginDto accountLoginDto)
         {
             //authenticate the user using identity
@@ -41,14 +41,6 @@ namespace Pri.Games.Api.Controllers
             //get the claims
             var claims = await _userManager.GetClaimsAsync(user);
             //add userId to claims
-            claims.Add(new Claim(ClaimTypes.PrimarySid,user.Id));
-            //put roles in claims
-            var roles = await _userManager.GetRolesAsync(user);
-            //convert to claims and put in claims array
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
             //generate the security key
             var securityKey = 
                 new SymmetricSecurityKey
@@ -65,6 +57,39 @@ namespace Pri.Games.Api.Controllers
             //serializen
             var serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new AccountLoginResponseDto { Token = serializedToken});
+        }
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(AccountRegisterDto accountRegisterDto)
+        {
+            //create a user
+            var user = new ApplicationUser
+            {
+                Firstname = accountRegisterDto.Firstname,
+                Lastname = accountRegisterDto.Lastname,
+                DateOfBirth = accountRegisterDto.DateOfBirth,
+                UserName = accountRegisterDto.Username,
+                Email = accountRegisterDto.Username,
+            };
+            //store using _userManager
+            var result = await _userManager.CreateAsync(user,
+                accountRegisterDto.Password);
+            if(!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            //add claims to user
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Role, "User"),
+                new Claim(ClaimTypes.PrimarySid, user.Id),
+                new Claim(ClaimTypes.DateOfBirth, user.DateOfBirth.ToShortDateString()),
+            };
+            result = await _userManager.AddClaimsAsync(user, claims);
+            if(!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok("user created");
         }
     }
 }

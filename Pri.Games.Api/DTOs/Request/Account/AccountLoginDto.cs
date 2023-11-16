@@ -5,6 +5,7 @@ namespace Pri.Games.Api.DTOs.Request.Account
     public class AccountLoginDto
     {
         [Required]
+        [EmailAddress]
         public string Username { get; set; }
         [Required]
         public string Password { get; set; }

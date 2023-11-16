@@ -23,7 +23,8 @@ namespace Pri.Games.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "User")]
+        
         public async Task<IActionResult> GetAll()
         {
             var result = await _gameService.GetAllAsync();
@@ -38,6 +39,7 @@ namespace Pri.Games.Api.Controllers
             return BadRequest(result.Errors);
         }
         [HttpGet("{id:int}")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Get(int id) 
         {
             var result = await _gameService.GetByIdAsync(id);

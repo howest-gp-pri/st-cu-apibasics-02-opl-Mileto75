@@ -11,6 +11,7 @@ namespace Pri.Ca.Core.Entities
     {
         public string Firstname { get; set; }
         public string Lastname { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public ICollection<Game> Games { get; set; }
     }
 }

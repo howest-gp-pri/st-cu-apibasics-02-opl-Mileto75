@@ -52,18 +52,20 @@ namespace Pri.Ca.Infrastructure.Data.Seeding
                 ConcurrencyStamp = new Guid().ToString(),
                 Firstname = "Bart",
                 Lastname = "Soete",
+                DateOfBirth = DateTime.Parse("12/12/1972"),
             };
-            var user = new ApplicationUser
-            {
-                Id = "2",
-                UserName = "user@games.com",
-                NormalizedUserName = "USER@GAMES.COM",
-                Email = "user@games.com",
-                NormalizedEmail = "USER@GAMES.COM",
-                SecurityStamp = new Guid().ToString(),
-                ConcurrencyStamp = new Guid().ToString(),
-                Firstname = "Mileto",
-                Lastname = "Di Marco",
+        var user = new ApplicationUser
+        {
+            Id = "2",
+            UserName = "user@games.com",
+            NormalizedUserName = "USER@GAMES.COM",
+            Email = "user@games.com",
+            NormalizedEmail = "USER@GAMES.COM",
+            SecurityStamp = new Guid().ToString(),
+            ConcurrencyStamp = new Guid().ToString(),
+            Firstname = "Mileto",
+            Lastname = "Di Marco",
+            DateOfBirth = DateTime.Parse("12/12/1975"),
             };
             //hash passwords
             IPasswordHasher<ApplicationUser> _hasher = new PasswordHasher<ApplicationUser>();
@@ -74,8 +76,10 @@ namespace Pri.Ca.Infrastructure.Data.Seeding
             {
                 new IdentityUserClaim<string>{Id = 1,UserId = admin.Id,ClaimType = ClaimTypes.Role,ClaimValue = "Admin"},
                 new IdentityUserClaim<string>{Id = 2,UserId = user.Id,ClaimType = ClaimTypes.Role,ClaimValue = "User"},
-                new IdentityUserClaim<string>{Id = 3,UserId = admin.Id,ClaimType = ClaimTypes.NameIdentifier,ClaimValue = admin.Id},
-                new IdentityUserClaim<string>{Id = 4,UserId = user.Id,ClaimType = ClaimTypes.NameIdentifier,ClaimValue = user.Id},
+                new IdentityUserClaim<string>{Id = 3,UserId = admin.Id,ClaimType = ClaimTypes.PrimarySid,ClaimValue = admin.Id},
+                new IdentityUserClaim<string>{Id = 4,UserId = user.Id,ClaimType = ClaimTypes.PrimarySid,ClaimValue = user.Id},
+                new IdentityUserClaim<string>{Id = 5,UserId = admin.Id,ClaimType = ClaimTypes.DateOfBirth,ClaimValue = admin.DateOfBirth.ToShortDateString()},
+                new IdentityUserClaim<string>{Id = 6,UserId = user.Id,ClaimType = ClaimTypes.DateOfBirth,ClaimValue = user.DateOfBirth.ToShortDateString()},
             };
             //modelbuilder
             modelBuilder.Entity<Publisher>().HasData(publishers);

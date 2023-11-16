@@ -53,7 +53,6 @@ namespace Pri.Ca.Infrastructure.Migrations
                 column: "PasswordHash",
                 value: "AQAAAAEAACcQAAAAEC+WIJD2958zqOzrgBEMusF/FjaG2DKz/mEDxCW2aYiflQMzAMTZmkxNBguoDdFHug==");
         }
-
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
