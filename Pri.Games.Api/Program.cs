@@ -95,6 +95,24 @@ namespace Pri.Games.Api
                         return true;
                     }
                     ));
+                //18+ policy
+                options.AddPolicy("18+",policy =>
+                policy.RequireAssertion(context =>
+                {
+                    if (context.User.Claims.Count() == 0)
+                    {
+                        return false;
+                    }
+                    var dateOfBirthClaim = 
+                    context.User.Claims.FirstOrDefault(c => 
+                    c.Type.Equals(ClaimTypes.DateOfBirth)).Value;
+                    var dateOfBirth = DateTime.Parse(dateOfBirthClaim);
+                    if(DateTime.Now.Year - dateOfBirth.Year < 18)
+                    {
+                        return false;
+                    }
+                    return true;
+                }));
             });
             builder.Services.AddScoped<IGameRepository, GameRepository>();
             builder.Services.AddScoped<IGenreRepository, GenreRepository>();

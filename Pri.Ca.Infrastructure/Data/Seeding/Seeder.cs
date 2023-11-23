@@ -65,7 +65,7 @@ namespace Pri.Ca.Infrastructure.Data.Seeding
             ConcurrencyStamp = new Guid().ToString(),
             Firstname = "Mileto",
             Lastname = "Di Marco",
-            DateOfBirth = DateTime.Parse("12/12/1975"),
+            DateOfBirth = DateTime.Parse("12/12/2010"),
             };
             //hash passwords
             IPasswordHasher<ApplicationUser> _hasher = new PasswordHasher<ApplicationUser>();
